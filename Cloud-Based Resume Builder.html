@@ -1,0 +1,2324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Cloud Resume Builder</title>
+
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+
+/* =========================
+   LOGIN / REGISTER
+========================= */
+
+.auth-box {
+
+    max-width: 450px;
+
+    margin: 70px auto;
+
+    background: white;
+
+    padding: 35px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,0.2);
+}
+
+.auth-box h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.auth-box p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+
+    margin-top: 12px;
+    margin-bottom: 6px;
+
+    font-weight: bold;
+
+    color: #444;
+}
+
+input,
+textarea,
+select {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+textarea {
+
+    min-height: 120px;
+
+    resize: vertical;
+}
+
+button {
+
+    border: none;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+
+    background: #667eea;
+
+    color: white;
+
+    cursor: pointer;
+
+    margin-top: 15px;
+
+    margin-right: 5px;
+
+    font-size: 14px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.register-btn {
+    background: #27ae60;
+}
+
+.logout-btn {
+    background: #e74c3c;
+}
+
+.delete-btn {
+    background: #e74c3c;
+}
+
+.edit-btn {
+    background: #f39c12;
+}
+
+.clear-btn {
+    background: #777;
+}
+
+.download-btn {
+    background: #2c3e50;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+
+    padding: 12px;
+
+    margin-bottom: 15px;
+
+    border-radius: 8px;
+
+    background: #d4edda;
+
+    color: #155724;
+}
+
+.error {
+
+    background: #f8d7da;
+
+    color: #721c24;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar {
+
+    background: white;
+
+    padding: 20px 25px;
+
+    border-radius: 15px;
+
+    margin-bottom: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.topbar h1 {
+    color: #333;
+}
+
+.topbar p {
+    color: #666;
+    margin-top: 5px;
+}
+
+
+/* =========================
+   BUILDER
+========================= */
+
+.builder {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+}
+
+.form-card {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    margin-bottom: 20px;
+}
+
+.form-card h2 {
+
+    color: #444;
+
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+
+/* =========================
+   RESUME PREVIEW
+========================= */
+
+.preview {
+
+    background: white;
+
+    padding: 40px;
+
+    min-height: 850px;
+
+    border-radius: 5px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,0.15);
+}
+
+.resume-header {
+
+    border-bottom: 2px solid #333;
+
+    padding-bottom: 15px;
+
+    margin-bottom: 20px;
+}
+
+.resume-header h1 {
+
+    font-size: 32px;
+
+    color: #222;
+
+    margin-bottom: 8px;
+}
+
+.contact {
+
+    color: #555;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+.resume-section {
+
+    margin-bottom: 20px;
+}
+
+.resume-section h2 {
+
+    font-size: 18px;
+
+    color: #333;
+
+    border-bottom: 1px solid #ccc;
+
+    padding-bottom: 5px;
+
+    margin-bottom: 10px;
+}
+
+.resume-section p {
+
+    color: #555;
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+}
+
+.skill-list {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.skill {
+
+    background: #667eea;
+
+    color: white;
+
+    padding: 5px 10px;
+
+    border-radius: 15px;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   SAVED RESUMES
+========================= */
+
+.resume-list {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    margin-top: 20px;
+}
+
+.resume-item {
+
+    padding: 15px;
+
+    background: #f5f6ff;
+
+    border-left: 4px solid #667eea;
+
+    border-radius: 8px;
+
+    margin-bottom: 10px;
+}
+
+.resume-item h3 {
+    color: #333;
+}
+
+.resume-item p {
+
+    color: #777;
+
+    font-size: 13px;
+
+    margin-top: 5px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 800px) {
+
+    .builder {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .topbar {
+
+        flex-direction: column;
+
+        text-align: center;
+
+        gap: 15px;
+
+    }
+
+    .preview {
+
+        padding: 25px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =================================================
+     LOGIN PAGE
+================================================= -->
+
+<div id="loginPage"
+     class="auth-box">
+
+    <h1>
+        📄 Cloud Resume Builder
+    </h1>
+
+    <p>
+        Login to create and manage your resumes.
+    </p>
+
+
+    <div id="loginMessage"></div>
+
+
+    <label>
+        Username
+    </label>
+
+    <input
+        type="text"
+        id="loginUsername"
+        placeholder="Enter username"
+    >
+
+
+    <label>
+        Password
+    </label>
+
+    <input
+        type="password"
+        id="loginPassword"
+        placeholder="Enter password"
+    >
+
+
+    <button onclick="login()">
+        🔐 Login
+    </button>
+
+
+    <button
+        class="register-btn"
+        onclick="showRegister()">
+
+        📝 Register
+
+    </button>
+
+
+    <p style="margin-top:20px;">
+
+        Demo:
+
+        <b>admin</b> /
+
+        <b>123456</b>
+
+    </p>
+
+</div>
+
+
+
+<!-- =================================================
+     REGISTER PAGE
+================================================= -->
+
+<div id="registerPage"
+     class="auth-box hidden">
+
+    <h1>
+        📝 Create Account
+    </h1>
+
+    <p>
+        Register to build your resume.
+    </p>
+
+
+    <div id="registerMessage"></div>
+
+
+    <label>
+        Username
+    </label>
+
+    <input
+        type="text"
+        id="registerUsername"
+        placeholder="Create username"
+    >
+
+
+    <label>
+        Password
+    </label>
+
+    <input
+        type="password"
+        id="registerPassword"
+        placeholder="Create password"
+    >
+
+
+    <label>
+        Confirm Password
+    </label>
+
+    <input
+        type="password"
+        id="confirmPassword"
+        placeholder="Confirm password"
+    >
+
+
+    <button
+        class="register-btn"
+        onclick="registerUser()">
+
+        Create Account
+
+    </button>
+
+
+    <button onclick="showLogin()">
+
+        Back to Login
+
+    </button>
+
+</div>
+
+
+
+<!-- =================================================
+     DASHBOARD
+================================================= -->
+
+<div id="dashboardPage"
+     class="hidden">
+
+
+<!-- TOP BAR -->
+
+<div class="topbar">
+
+    <div>
+
+        <h1>
+            📄 Cloud Resume Builder
+        </h1>
+
+        <p>
+            Welcome,
+            <b id="currentUser"></b>
+        </p>
+
+    </div>
+
+
+    <button
+        class="logout-btn"
+        onclick="logout()">
+
+        🚪 Logout
+
+    </button>
+
+</div>
+
+
+
+<!-- BUILDER -->
+
+<div class="builder">
+
+
+<!-- =================================================
+     RESUME FORM
+================================================= -->
+
+<div>
+
+
+<div class="form-card">
+
+    <h2>
+        👤 Personal Information
+    </h2>
+
+
+    <label>
+        Full Name
+    </label>
+
+    <input
+        type="text"
+        id="fullName"
+        placeholder="John Doe"
+        oninput="updatePreview()"
+    >
+
+
+    <label>
+        Email
+    </label>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="john@example.com"
+        oninput="updatePreview()"
+    >
+
+
+    <label>
+        Phone
+    </label>
+
+    <input
+        type="tel"
+        id="phone"
+        placeholder="+91 9876543210"
+        oninput="updatePreview()"
+    >
+
+
+    <label>
+        Location
+    </label>
+
+    <input
+        type="text"
+        id="location"
+        placeholder="Chennai, India"
+        oninput="updatePreview()"
+    >
+
+</div>
+
+
+
+<div class="form-card">
+
+    <h2>
+        🎓 Education
+    </h2>
+
+
+    <label>
+        Education Details
+    </label>
+
+    <textarea
+        id="education"
+        placeholder="B.Tech Computer Science - XYZ University - 2026"
+        oninput="updatePreview()"
+    ></textarea>
+
+</div>
+
+
+
+<div class="form-card">
+
+    <h2>
+        💼 Work Experience
+    </h2>
+
+
+    <label>
+        Experience
+    </label>
+
+    <textarea
+        id="experience"
+        placeholder="Software Developer - ABC Company - 2024 to Present"
+        oninput="updatePreview()"
+    ></textarea>
+
+</div>
+
+
+
+<div class="form-card">
+
+    <h2>
+        🛠️ Skills
+    </h2>
+
+
+    <label>
+        Skills
+    </label>
+
+    <input
+        type="text"
+        id="skills"
+        placeholder="HTML, CSS, JavaScript, Python"
+        oninput="updatePreview()"
+    >
+
+</div>
+
+
+
+<div class="form-card">
+
+    <h2>
+        📜 About Me
+    </h2>
+
+
+    <label>
+        Professional Summary
+    </label>
+
+    <textarea
+        id="summary"
+        placeholder="Write a short professional summary..."
+        oninput="updatePreview()"
+    ></textarea>
+
+</div>
+
+
+
+<div class="form-card">
+
+    <h2>
+        🚀 Projects
+    </h2>
+
+
+    <label>
+        Projects
+    </label>
+
+    <textarea
+        id="projects"
+        placeholder="Cloud Notes Application - HTML, CSS, JavaScript"
+        oninput="updatePreview()"
+    ></textarea>
+
+</div>
+
+
+
+<div class="form-card">
+
+    <h2>
+        🔗 Additional Information
+    </h2>
+
+
+    <label>
+        LinkedIn / Portfolio
+    </label>
+
+    <input
+        type="text"
+        id="linkedin"
+        placeholder="linkedin.com/in/yourname"
+        oninput="updatePreview()"
+    >
+
+
+    <button onclick="saveResume()">
+        💾 Save Resume
+    </button>
+
+
+    <button
+        class="clear-btn"
+        onclick="clearForm()">
+
+        🧹 Clear
+
+    </button>
+
+
+    <button
+        class="download-btn"
+        onclick="printResume()">
+
+        📥 Download / Print
+
+    </button>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =================================================
+     LIVE RESUME PREVIEW
+================================================= -->
+
+<div>
+
+    <div class="preview"
+         id="resumePreview">
+
+
+        <div class="resume-header">
+
+            <h1 id="previewName">
+                Your Name
+            </h1>
+
+
+            <div class="contact">
+
+                <span id="previewEmail">
+                    email@example.com
+                </span>
+
+                &nbsp; | &nbsp;
+
+                <span id="previewPhone">
+                    Phone
+                </span>
+
+                &nbsp; | &nbsp;
+
+                <span id="previewLocation">
+                    Location
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="resume-section">
+
+            <h2>
+                PROFESSIONAL SUMMARY
+            </h2>
+
+            <p id="previewSummary">
+                Your professional summary will
+                appear here.
+            </p>
+
+        </div>
+
+
+
+        <div class="resume-section">
+
+            <h2>
+                EDUCATION
+            </h2>
+
+            <p id="previewEducation">
+                Your education details will
+                appear here.
+            </p>
+
+        </div>
+
+
+
+        <div class="resume-section">
+
+            <h2>
+                WORK EXPERIENCE
+            </h2>
+
+            <p id="previewExperience">
+                Your work experience will
+                appear here.
+            </p>
+
+        </div>
+
+
+
+        <div class="resume-section">
+
+            <h2>
+                SKILLS
+            </h2>
+
+            <div
+                class="skill-list"
+                id="previewSkills">
+
+            </div>
+
+        </div>
+
+
+
+        <div class="resume-section">
+
+            <h2>
+                PROJECTS
+            </h2>
+
+            <p id="previewProjects">
+                Your projects will
+                appear here.
+            </p>
+
+        </div>
+
+
+
+        <div class="resume-section">
+
+            <h2>
+                LINKEDIN / PORTFOLIO
+            </h2>
+
+            <p id="previewLinkedin">
+                Your LinkedIn or portfolio
+                will appear here.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =================================================
+     SAVED RESUMES
+================================================= -->
+
+<div class="resume-list">
+
+    <h2>
+        📚 My Saved Resumes
+    </h2>
+
+
+    <div id="savedResumes">
+
+    </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+// =================================================
+// STORAGE
+// =================================================
+
+
+let users =
+
+    JSON.parse(
+        localStorage.getItem(
+            "resumeUsers"
+        )
+    ) || [];
+
+
+let resumes =
+
+    JSON.parse(
+        localStorage.getItem(
+            "resumeData"
+        )
+    ) || [];
+
+
+let currentUser =
+
+    localStorage.getItem(
+        "resumeCurrentUser"
+    );
+
+
+let editingResumeId = null;
+
+
+
+// =================================================
+// DEFAULT ADMIN
+// =================================================
+
+
+if (users.length === 0) {
+
+    users.push({
+
+        username: "admin",
+
+        password: "123456"
+
+    });
+
+
+    localStorage.setItem(
+
+        "resumeUsers",
+
+        JSON.stringify(users)
+
+    );
+
+}
+
+
+
+// =================================================
+// PAGE FUNCTIONS
+// =================================================
+
+
+function showLogin() {
+
+    document
+        .getElementById(
+            "loginPage"
+        )
+        .classList
+        .remove("hidden");
+
+
+    document
+        .getElementById(
+            "registerPage"
+        )
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById(
+            "dashboardPage"
+        )
+        .classList
+        .add("hidden");
+
+}
+
+
+
+function showRegister() {
+
+    document
+        .getElementById(
+            "loginPage"
+        )
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById(
+            "registerPage"
+        )
+        .classList
+        .remove("hidden");
+
+
+    document
+        .getElementById(
+            "dashboardPage"
+        )
+        .classList
+        .add("hidden");
+
+}
+
+
+
+function showDashboard() {
+
+    document
+        .getElementById(
+            "loginPage"
+        )
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById(
+            "registerPage"
+        )
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById(
+            "dashboardPage"
+        )
+        .classList
+        .remove("hidden");
+
+
+    document
+        .getElementById(
+            "currentUser"
+        )
+        .textContent =
+        currentUser;
+
+
+    displaySavedResumes();
+
+    updatePreview();
+
+}
+
+
+
+// =================================================
+// REGISTER
+// =================================================
+
+
+function registerUser() {
+
+
+    let username =
+
+        document
+            .getElementById(
+                "registerUsername"
+            )
+            .value
+            .trim();
+
+
+    let password =
+
+        document
+            .getElementById(
+                "registerPassword"
+            )
+            .value;
+
+
+    let confirmPassword =
+
+        document
+            .getElementById(
+                "confirmPassword"
+            )
+            .value;
+
+
+    let message =
+
+        document
+            .getElementById(
+                "registerMessage"
+            );
+
+
+    if (
+        username === "" ||
+        password === ""
+    ) {
+
+        message.innerHTML = `
+
+            <div class="message error">
+
+                Please fill all fields.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    if (password.length < 6) {
+
+        message.innerHTML = `
+
+            <div class="message error">
+
+                Password must contain
+                at least 6 characters.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    if (
+        password !==
+        confirmPassword
+    ) {
+
+        message.innerHTML = `
+
+            <div class="message error">
+
+                Passwords do not match.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    let exists =
+
+        users.find(
+
+            user =>
+                user.username ===
+                username
+
+        );
+
+
+    if (exists) {
+
+        message.innerHTML = `
+
+            <div class="message error">
+
+                Username already exists.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    users.push({
+
+        username:
+            username,
+
+        password:
+            password
+
+    });
+
+
+    localStorage.setItem(
+
+        "resumeUsers",
+
+        JSON.stringify(users)
+
+    );
+
+
+    message.innerHTML = `
+
+        <div class="message">
+
+            Account created successfully!
+
+        </div>
+
+    `;
+
+
+    document.getElementById(
+        "registerUsername"
+    ).value = "";
+
+
+    document.getElementById(
+        "registerPassword"
+    ).value = "";
+
+
+    document.getElementById(
+        "confirmPassword"
+    ).value = "";
+
+
+    setTimeout(
+        showLogin,
+        1000
+    );
+
+}
+
+
+
+// =================================================
+// LOGIN
+// =================================================
+
+
+function login() {
+
+
+    let username =
+
+        document
+            .getElementById(
+                "loginUsername"
+            )
+            .value
+            .trim();
+
+
+    let password =
+
+        document
+            .getElementById(
+                "loginPassword"
+            )
+            .value;
+
+
+    let message =
+
+        document
+            .getElementById(
+                "loginMessage"
+            );
+
+
+    let user =
+
+        users.find(
+
+            user =>
+
+                user.username ===
+                username &&
+
+                user.password ===
+                password
+
+        );
+
+
+    if (!user) {
+
+        message.innerHTML = `
+
+            <div class="message error">
+
+                Invalid username or password.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    currentUser =
+        username;
+
+
+    localStorage.setItem(
+
+        "resumeCurrentUser",
+
+        currentUser
+
+    );
+
+
+    document.getElementById(
+        "loginUsername"
+    ).value = "";
+
+
+    document.getElementById(
+        "loginPassword"
+    ).value = "";
+
+
+    showDashboard();
+
+}
+
+
+
+// =================================================
+// LOGOUT
+// =================================================
+
+
+function logout() {
+
+    currentUser = null;
+
+
+    localStorage.removeItem(
+
+        "resumeCurrentUser"
+
+    );
+
+
+    showLogin();
+
+}
+
+
+
+// =================================================
+// UPDATE LIVE PREVIEW
+// =================================================
+
+
+function updatePreview() {
+
+
+    let name =
+        document
+            .getElementById(
+                "fullName"
+            )
+            .value;
+
+
+    let email =
+        document
+            .getElementById(
+                "email"
+            )
+            .value;
+
+
+    let phone =
+        document
+            .getElementById(
+                "phone"
+            )
+            .value;
+
+
+    let location =
+        document
+            .getElementById(
+                "location"
+            )
+            .value;
+
+
+    let summary =
+        document
+            .getElementById(
+                "summary"
+            )
+            .value;
+
+
+    let education =
+        document
+            .getElementById(
+                "education"
+            )
+            .value;
+
+
+    let experience =
+        document
+            .getElementById(
+                "experience"
+            )
+            .value;
+
+
+    let skills =
+        document
+            .getElementById(
+                "skills"
+            )
+            .value;
+
+
+    let projects =
+        document
+            .getElementById(
+                "projects"
+            )
+            .value;
+
+
+    let linkedin =
+        document
+            .getElementById(
+                "linkedin"
+            )
+            .value;
+
+
+
+    document.getElementById(
+        "previewName"
+    ).textContent =
+        name ||
+        "Your Name";
+
+
+    document.getElementById(
+        "previewEmail"
+    ).textContent =
+        email ||
+        "email@example.com";
+
+
+    document.getElementById(
+        "previewPhone"
+    ).textContent =
+        phone ||
+        "Phone";
+
+
+    document.getElementById(
+        "previewLocation"
+    ).textContent =
+        location ||
+        "Location";
+
+
+    document.getElementById(
+        "previewSummary"
+    ).textContent =
+        summary ||
+        "Your professional summary will appear here.";
+
+
+    document.getElementById(
+        "previewEducation"
+    ).textContent =
+        education ||
+        "Your education details will appear here.";
+
+
+    document.getElementById(
+        "previewExperience"
+    ).textContent =
+        experience ||
+        "Your work experience will appear here.";
+
+
+    document.getElementById(
+        "previewProjects"
+    ).textContent =
+        projects ||
+        "Your projects will appear here.";
+
+
+    document.getElementById(
+        "previewLinkedin"
+    ).textContent =
+        linkedin ||
+        "Your LinkedIn or portfolio will appear here.";
+
+
+
+    let skillContainer =
+
+        document.getElementById(
+            "previewSkills"
+        );
+
+
+    skillContainer.innerHTML = "";
+
+
+    if (skills.trim() !== "") {
+
+        skills
+            .split(",")
+            .forEach(
+
+                skill => {
+
+                    let span =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    span.className =
+                        "skill";
+
+
+                    span.textContent =
+                        skill.trim();
+
+
+                    skillContainer
+                        .appendChild(
+                            span
+                        );
+
+                }
+
+            );
+
+    }
+
+}
+
+
+
+// =================================================
+// SAVE RESUME
+// =================================================
+
+
+function saveResume() {
+
+
+    let name =
+        document
+            .getElementById(
+                "fullName"
+            )
+            .value
+            .trim();
+
+
+    if (name === "") {
+
+        alert(
+            "Please enter your full name."
+        );
+
+        return;
+
+    }
+
+
+    let resume = {
+
+        id:
+            Date.now(),
+
+        username:
+            currentUser,
+
+        fullName:
+            document
+                .getElementById(
+                    "fullName"
+                )
+                .value,
+
+        email:
+            document
+                .getElementById(
+                    "email"
+                )
+                .value,
+
+        phone:
+            document
+                .getElementById(
+                    "phone"
+                )
+                .value,
+
+        location:
+            document
+                .getElementById(
+                    "location"
+                )
+                .value,
+
+        summary:
+            document
+                .getElementById(
+                    "summary"
+                )
+                .value,
+
+        education:
+            document
+                .getElementById(
+                    "education"
+                )
+                .value,
+
+        experience:
+            document
+                .getElementById(
+                    "experience"
+                )
+                .value,
+
+        skills:
+            document
+                .getElementById(
+                    "skills"
+                )
+                .value,
+
+        projects:
+            document
+                .getElementById(
+                    "projects"
+                )
+                .value,
+
+        linkedin:
+            document
+                .getElementById(
+                    "linkedin"
+                )
+                .value,
+
+        date:
+            new Date()
+                .toLocaleString()
+
+    };
+
+
+
+    // UPDATE EXISTING RESUME
+
+    if (
+        editingResumeId !== null
+    ) {
+
+        let oldResume =
+            resumes.find(
+
+                item =>
+                    item.id ===
+                    editingResumeId
+
+            );
+
+
+        if (oldResume) {
+
+            resume.id =
+                oldResume.id;
+
+        }
+
+
+        resumes =
+            resumes.map(
+
+                item =>
+
+                    item.id ===
+                    editingResumeId
+
+                    ? resume
+
+                    : item
+
+            );
+
+
+        editingResumeId =
+            null;
+
+    }
+
+
+    // NEW RESUME
+
+    else {
+
+        resumes.push(
+            resume
+        );
+
+    }
+
+
+
+    localStorage.setItem(
+
+        "resumeData",
+
+        JSON.stringify(
+            resumes
+        )
+
+    );
+
+
+    alert(
+        "Resume saved successfully!"
+    );
+
+
+    displaySavedResumes();
+
+}
+
+
+
+// =================================================
+// DISPLAY SAVED RESUMES
+// =================================================
+
+
+function displaySavedResumes() {
+
+
+    let container =
+
+        document.getElementById(
+            "savedResumes"
+        );
+
+
+    let userResumes =
+
+        resumes.filter(
+
+            resume =>
+                resume.username ===
+                currentUser
+
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (
+        userResumes.length ===
+        0
+    ) {
+
+        container.innerHTML = `
+
+            <p>
+                No saved resumes yet.
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    userResumes
+        .slice()
+        .reverse()
+        .forEach(
+
+            resume => {
+
+
+                let div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "resume-item";
+
+
+                div.innerHTML = `
+
+                    <h3>
+                        ${escapeHTML(
+                            resume.fullName
+                        )}
+                    </h3>
+
+                    <p>
+                        Saved:
+                        ${escapeHTML(
+                            resume.date
+                        )}
+                    </p>
+
+                    <button
+                        class="edit-btn"
+                        onclick="
+                            editResume(
+                                ${resume.id}
+                            )
+                        ">
+
+                        ✏️ Edit
+
+                    </button>
+
+
+                    <button
+                        class="delete-btn"
+                        onclick="
+                            deleteResume(
+                                ${resume.id}
+                            )
+                        ">
+
+                        🗑️ Delete
+
+                    </button>
+
+                `;
+
+
+                container.appendChild(
+                    div
+                );
+
+            }
+
+        );
+
+}
+
+
+
+// =================================================
+// EDIT RESUME
+// =================================================
+
+
+function editResume(id) {
+
+
+    let resume =
+
+        resumes.find(
+
+            item =>
+                item.id === id
+
+        );
+
+
+    if (!resume) {
+        return;
+    }
+
+
+    document.getElementById(
+        "fullName"
+    ).value =
+        resume.fullName;
+
+
+    document.getElementById(
+        "email"
+    ).value =
+        resume.email;
+
+
+    document.getElementById(
+        "phone"
+    ).value =
+        resume.phone;
+
+
+    document.getElementById(
+        "location"
+    ).value =
+        resume.location;
+
+
+    document.getElementById(
+        "summary"
+    ).value =
+        resume.summary;
+
+
+    document.getElementById(
+        "education"
+    ).value =
+        resume.education;
+
+
+    document.getElementById(
+        "experience"
+    ).value =
+        resume.experience;
+
+
+    document.getElementById(
+        "skills"
+    ).value =
+        resume.skills;
+
+
+    document.getElementById(
+        "projects"
+    ).value =
+        resume.projects;
+
+
+    document.getElementById(
+        "linkedin"
+    ).value =
+        resume.linkedin;
+
+
+    editingResumeId =
+        id;
+
+
+    updatePreview();
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+
+// =================================================
+// DELETE RESUME
+// =================================================
+
+
+function deleteResume(id) {
+
+
+    let confirmation =
+
+        confirm(
+            "Are you sure you want to delete this resume?"
+        );
+
+
+    if (!confirmation) {
+        return;
+    }
+
+
+    resumes =
+
+        resumes.filter(
+
+            resume =>
+                resume.id !== id
+
+        );
+
+
+    localStorage.setItem(
+
+        "resumeData",
+
+        JSON.stringify(
+            resumes
+        )
+
+    );
+
+
+    displaySavedResumes();
+
+}
+
+
+
+// =================================================
+// CLEAR FORM
+// =================================================
+
+
+function clearForm() {
+
+
+    document
+        .querySelectorAll(
+            "#dashboardPage input, #dashboardPage textarea"
+        )
+        .forEach(
+
+            element => {
+
+                element.value = "";
+
+            }
+
+        );
+
+
+    editingResumeId =
+        null;
+
+
+    updatePreview();
+
+}
+
+
+
+// =================================================
+// PRINT / DOWNLOAD
+// =================================================
+
+
+function printResume() {
+
+
+    let resume =
+        document.getElementById(
+            "resumePreview"
+        ).innerHTML;
+
+
+    let printWindow =
+        window.open(
+            "",
+            "",
+            "width=900,height=900"
+        );
+
+
+    printWindow.document.write(`
+
+        <html>
+
+        <head>
+
+            <title>
+                Resume
+            </title>
+
+            <style>
+
+                body {
+                    font-family: Arial;
+                    padding: 40px;
+                    color: #333;
+                }
+
+                .resume-header {
+                    border-bottom:
+                        2px solid #333;
+
+                    padding-bottom: 15px;
+
+                    margin-bottom: 20px;
+                }
+
+                .resume-header h1 {
+                    font-size: 32px;
+                }
+
+                .contact {
+                    color: #555;
+                    margin-top: 10px;
+                }
+
+                .resume-section {
+                    margin-bottom: 20px;
+                }
+
+                .resume-section h2 {
+                    font-size: 18px;
+                    border-bottom:
+                        1px solid #ccc;
+
+                    padding-bottom: 5px;
+                }
+
+                .resume-section p {
+                    line-height: 1.6;
+                    white-space: pre-wrap;
+                }
+
+                .skill-list {
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                }
+
+                .skill {
+                    background: #667eea;
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 15px;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            ${resume}
+
+        </body>
+
+        </html>
+
+    `);
+
+
+    printWindow.document.close();
+
+
+    printWindow.print();
+
+}
+
+
+
+// =================================================
+// SECURITY
+// =================================================
+
+
+function escapeHTML(text) {
+
+
+    let div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text;
+
+
+    return div.innerHTML;
+
+}
+
+
+
+// =================================================
+// AUTO LOGIN
+// =================================================
+
+
+if (currentUser) {
+
+    showDashboard();
+
+}
+
+else {
+
+    showLogin();
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
